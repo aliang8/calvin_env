@@ -1,4 +1,5 @@
 from enum import Enum
+from calvin_env.scene.objects.light import LightState
 
 MAX_FORCE = 4
 
@@ -45,7 +46,13 @@ class Button:
             _state,
             physicsClientId=self.cid,
         )
-        self.state = ButtonState.OFF
+
+        if self.light and self.light.state == LightState.ON:
+            self.prev_is_pressed = True
+            self.state = ButtonState.ON
+        else:
+            self.prev_is_pressed = False
+            self.state = ButtonState.OFF
 
     def step(self):
         if self.state == ButtonState.OFF and not self.prev_is_pressed and self._is_pressed:
@@ -66,7 +73,7 @@ class Button:
             return self.get_state() < self.trigger_threshold
 
     def get_state(self):
-        """ return button joint state """
+        """return button joint state"""
         return float(self.p.getJointState(self.uid, self.joint_index, physicsClientId=self.cid)[0])
 
     def get_info(self):

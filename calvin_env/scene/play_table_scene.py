@@ -99,12 +99,12 @@ class PlayTableScene:
 
             for door, state in zip(self.doors, door_info):
                 door.reset(state)
-            for button, state in zip(self.buttons, button_info):
-                button.reset(state)
             for switch, state in zip(self.switches, switch_info):
                 switch.reset(state)
             for light, state in zip(self.lights, light_info):
                 light.reset(state)
+            for button, state in zip(self.buttons, button_info):
+                button.reset(state)
             for obj, state in zip(self.movable_objects, obj_info):
                 obj.reset(state)
 
@@ -125,7 +125,6 @@ class PlayTableScene:
         assert len(obj_info) // n_obj in [6, 7]  # depending on euler angles or quaternions
 
         obj_info = np.split(obj_info, n_obj)
-
         return door_info, button_info, switch_info, light_info, obj_info
 
     def reset_movable_objects(self):

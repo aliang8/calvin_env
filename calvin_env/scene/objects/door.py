@@ -15,6 +15,7 @@ class Door:
         self.joint_index = joint_index
         self.uid = uid
         self.initial_state = cfg["initial_state"]
+        self.ll, self.ul = self.p.getJointInfo(uid, joint_index, physicsClientId=self.cid)[8:10]
         self.p.setJointMotorControl2(
             self.uid,
             self.joint_index,
@@ -37,4 +38,8 @@ class Door:
         return float(joint_state[0])
 
     def get_info(self):
-        return {"current_state": self.get_state()}
+        pos, orn = self.p.getBasePositionAndOrientation(self.uid, physicsClientId=self.cid)
+        # if self.euler_obs:
+        #     orn = self.p.getEulerFromQuaternion(orn)
+
+        return {"current_pos": pos, "current_orn": orn, "current_state": self.get_state()}

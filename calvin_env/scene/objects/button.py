@@ -1,3 +1,4 @@
+import numpy as np
 from enum import Enum
 from calvin_env.scene.objects.light import LightState
 
@@ -77,7 +78,16 @@ class Button:
         return float(self.p.getJointState(self.uid, self.joint_index, physicsClientId=self.cid)[0])
 
     def get_info(self):
-        return {"joint_state": self.get_state(), "logical_state": self.state.value}
+        pos, orn = self.p.getBasePositionAndOrientation(self.uid, physicsClientId=self.cid)
+        # if self.euler_obs:
+        #     orn = self.p.getEulerFromQuaternion(orn)
+
+        return {
+            "current_pos": pos,
+            "current_orn": orn,
+            "joint_state": self.get_state(),
+            "logical_state": self.state.value,
+        }
 
     def add_effect(self, light):
         self.light = light
